@@ -2,37 +2,6 @@
 # Description : This Script is used to create Droplet, Volume, Volume Attachment, and floating Ip.
 # Copyright @ CloudDrove. All Right Reserved.
 
-locals {
-  sizes = {
-    nano      = "s-1vcpu-1gb"
-    micro     = "s-2vcpu-2gb"
-    small     = "s-2vcpu-4gb"
-    medium    = "s-4vcpu-8gb"
-    large     = "s-6vcpu-16gb"
-    x-large   = "s-8vcpu-32gb"
-    xx-large  = "s-16vcpu-64gb"
-    xxx-large = "s-24vcpu-128gb"
-    maximum   = "s-32vcpu-192gb"
-  }
-}
-
-locals {
-  region = {
-    amsterdam-2 = "ams2"
-    amsterdam-3 = "ams3"
-    bangalore-1 = "blr1"
-    frankfurt-1 = "fra1"
-    london      = "lon-1"
-    newyork-1   = "nyc1"
-    newyork-2   = "nyc2"
-    newyork-3   = "nyc3"
-    francisco-1 = "sfo1"
-    singapore-1 = "sgp1"
-    toronto-1   = "tor1"
-  }
-}
-
-
 
 # Lookup image to get id
 data "digitalocean_image" "official" {
@@ -58,7 +27,7 @@ module "labels" {
 resource "digitalocean_droplet" "main" {
   count = var.droplet_enabled == true ? var.droplet_count : 0
 
-  image              = join("", data.digitalocean_image.official.*.id)
+  image              = var.droplet_slug
   name               = format("%s%s%s", module.labels.id, var.delimiter, (count.index))
   region             = coalesce(local.region[var.region], var.region)
   size               = coalesce(local.sizes[var.droplet_size], var.droplet_size)
@@ -126,4 +95,3 @@ resource "digitalocean_floating_ip_assignment" "main" {
   droplet_id = element(digitalocean_droplet.main.*.id, count.index)
   depends_on = [digitalocean_droplet.main]
 }
-
