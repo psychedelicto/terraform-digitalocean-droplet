@@ -30,7 +30,7 @@ resource "digitalocean_droplet" "main" {
   image              = join("", data.digitalocean_image.official.*.id)
   name               = format("%s%s%s", module.labels.id, var.delimiter, (count.index))
   region             = var.region
-  size               = var.size
+  size               = var.droplet_size
   backups            = var.backups
   monitoring         = var.monitoring
   ipv6               = var.ipv6
