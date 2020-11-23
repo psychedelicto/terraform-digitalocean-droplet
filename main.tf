@@ -29,8 +29,8 @@ resource "digitalocean_droplet" "main" {
 
   image              = join("", data.digitalocean_image.official.*.id)
   name               = format("%s%s%s", module.labels.id, var.delimiter, (count.index))
-  region             = coalesce(local.region[var.region], var.region)
-  size               = coalesce(local.sizes[var.droplet_size], var.droplet_size)
+  region             = var.region
+  size               = var.size
   backups            = var.backups
   monitoring         = var.monitoring
   ipv6               = var.ipv6
