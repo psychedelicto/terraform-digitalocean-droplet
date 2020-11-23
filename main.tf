@@ -54,7 +54,7 @@ resource "digitalocean_droplet" "main" {
 resource "digitalocean_volume" "main" {
   count = var.droplet_enabled == true ? var.droplet_count : 0
 
-  region                   = coalesce(local.region[var.region], var.region)
+  region                   = var.region
   name                     = format("%s%s%s%s%s", module.labels.id, var.delimiter, "volume", var.delimiter, (count.index))
   size                     = var.block_storage_size
   description              = "Block storage for ${element(digitalocean_droplet.main.*.name, count.index)}"
@@ -83,7 +83,7 @@ resource "digitalocean_volume_attachment" "main" {
 #Description : Provides a DigitalOcean Floating IP to represent a publicly-accessible static IP addresses that can be mapped to one of your Droplets.
 resource "digitalocean_floating_ip" "main" {
   count  = var.floating_ip == true && var.droplet_enabled == true ? var.droplet_count : 0
-  region = coalesce(local.region[var.region], var.region)
+  region = var.region
 }
 
 #Module      : Floating Ip Assignment
