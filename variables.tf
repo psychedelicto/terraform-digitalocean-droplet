@@ -39,7 +39,7 @@ variable "droplet_enabled" {
 
 variable "region" {
   type        = string
-  default     = "bangalore-1"
+  default     = ""
   description = "The region to create VPC, like ``london-1`` , ``bangalore-1`` ,``newyork-3`` ``toronto-1``. "
 }
 

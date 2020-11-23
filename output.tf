@@ -13,3 +13,7 @@ output "name" {
   description = "The name of the Droplet."
 }
 
+output "ipv4_address_private" {
+  value       = digitalocean_droplet.main.*.ipv4_address_private
+  description = "The name of the Droplet."
+}
